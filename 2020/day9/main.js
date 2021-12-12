@@ -1020,4 +1020,34 @@ function checkFirstNotValid(input, preambleLength) {
     }
 }
 
+function findContiguousNumbers(input = [], preambleLength) {
+    const firstNotValid = checkFirstNotValid(input, preambleLength)
+    let ret = []
+    for (let idx = 2; idx < input.length; idx ++) {
+        for (let i = idx - 1; i >= 0; i--) {
+            ret = []
+            const sum = sumFromTo(input, i, idx, ret)
+            if (sum === firstNotValid) return ret
+            if (sum > firstNotValid) break
+        }
+    }
+    return ret
+}
+
+function findWeakness(input = [], preambleLength) {
+    const ret = findContiguousNumbers(input, preambleLength)
+    const sorted = ret.sort((a, b) => a - b)
+    return sorted[0] + sorted[sorted.length - 1]
+}
+
+function sumFromTo(input = [], from, to, ret = []) {
+    let sum = 0
+    for (let i = from; i <=to; i++) {
+        sum += input[i]
+        ret.push(input[i])
+    }
+    return sum
+}
+
 console.log(checkFirstNotValid(input, 25))
+console.log(findWeakness(input, 25))
