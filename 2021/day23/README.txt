@@ -1,0 +1,1 @@
+Exercise solved by hand
