@@ -2,6 +2,8 @@
   "name": "advent-of-code",
   "version": "1.0.0",
   "dependencies": {
+    "binomial": "^0.2.0",
+    "extra-math": "^1.1.18",
     "object-hash": "^2.2.0"
   }
 }
