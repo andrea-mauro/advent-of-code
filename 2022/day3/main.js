@@ -4,44 +4,18 @@ function findDuplicate(itemListString) {
 
     const itemList = itemListString.split('')
 
-    const first = new Set()
-    const second = new Set()
-
     const len = itemList.length/2
-    for (let i = 0; i < len; i++) {
-        first.add(itemList[i])
-        second.add(itemList[i + len])
-    }
+    const first = new Set(itemListString.substring(0, len).split(''))
 
-    for (el of first) {
-        if (second.has(el)) {
-            return el
-        }
-    }
+    return itemListString.substring(len).split('').filter(el => first.has(el))[0]
 }
 
 function findGroupBadge(itemListString1, itemListString2, itemListString3) {
-    const itemList1 = itemListString1.split('')
-    const itemList2 = itemListString2.split('')
-    const itemList3 = itemListString3.split('')
 
-    const first = new Set(itemList1)
-    const second = new Set(itemList2)
-    const third = new Set(itemList3)
+    const first = new Set(itemListString1.split(''))
+    const second = new Set(itemListString2.split(''))
 
-    const common = new Set()
-
-    for (el of first) {
-        if (second.has(el)) {
-            common.add(el)
-        }
-    }
-
-    for (el of common) {
-        if (third.has(el)) {
-            return el
-        }
-    }
+    return itemListString3.split('').filter(el => first.has(el) && second.has(el))[0]
 
 }
 
