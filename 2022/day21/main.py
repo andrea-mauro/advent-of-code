@@ -75,6 +75,17 @@ def solve_1():
     return round(eval(dfs(nodes['root'])))
 
 
+'''
+The idea here is to transform the linear equation (let's say 4j + 7 = 3j + 4) into an imaginary number 
+(4j + 7 - 3j + 4 -> j + 3) where j represents the imaginary part.
+We can then evaluate the imaginary number with `eval`. This will reduce the expression to it's real and imaginary constants.
+We then divide real and imaginary part to get the value of j.
+j is used for convenience since Python recognize it and we replace the = in the root operation with -
+
+see https://www.geeksforgeeks.org/solve-linear-equations-using-eval-in-python/ for reference
+'''
+
+
 def solve_2():
     nodes = parse_input(second_star=True)
     z = eval(dfs(nodes['root']), {'j': 1j})
