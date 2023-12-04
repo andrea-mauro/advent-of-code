@@ -46,8 +46,8 @@ def add_to_dict(num_dict, line, lookup_value, number):
         num_dict[last_occurrence] = number
 
 
-with open('input.txt', 'r') as f:
-    lines = tuple(f.read().split(sep='\n'))
+with open('input.txt', 'r') as file:
+    lines = tuple(file.read().splitlines())
 
     print('Part 1: ', end='')
     print(reduce(lambda a, b: a + extract_number(b), lines, 0))
