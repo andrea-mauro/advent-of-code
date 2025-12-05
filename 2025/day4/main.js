@@ -51,16 +51,11 @@ function findAtSymbolsWithFewNeighbors(grid) {
   const cols = grid[0].length;
   let count = 0;
 
-  console.log('Grid dimensions:', rows, 'x', cols);
-  console.log('\nAnalyzing each @ symbol:\n');
-
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       if (grid[row][col] === '@') {
         const adjacentCount = countAdjacentAtSymbols(grid, row, col);
-
         if (adjacentCount < 4) {
-          console.log(`Position (${row}, ${col}): ${adjacentCount} adjacent @ symbols ✓`);
           count++;
         }
       }
@@ -70,6 +65,49 @@ function findAtSymbolsWithFewNeighbors(grid) {
   return count;
 }
 
+/**
+ * Iteratively removes '@' symbols with less than 4 adjacent '@' symbols
+ * until no more such symbols exist, counting the total removed
+ * @param {Array<string>} grid - The grid as an array of strings
+ * @returns {number} - Total count of '@' symbols removed through all iterations
+ */
+function iterativelyRemoveAtSymbols(grid) {
+  let mutableGrid = grid.map(line => line.split(''));
+  let totalRemoved = 0;
+
+  while (true) {
+    const positionsToRemove = [];
+
+    for (let row = 0; row < mutableGrid.length; row++) {
+      for (let col = 0; col < mutableGrid[0].length; col++) {
+        if (mutableGrid[row][col] === '@') {
+          const adjacentCount = countAdjacentAtSymbols(
+            mutableGrid.map(r => r.join('')),
+            row,
+            col
+          );
+
+          if (adjacentCount < 4) {
+            positionsToRemove.push({ row, col });
+          }
+        }
+      }
+    }
+
+    if (positionsToRemove.length === 0) {
+      break;
+    }
+
+    for (const pos of positionsToRemove) {
+      mutableGrid[pos.row][pos.col] = '.';
+    }
+
+    totalRemoved += positionsToRemove.length;
+  }
+
+  return totalRemoved;
+}
+
 // Read and process the input file
 const inputPath = path.join(__dirname, 'input-1.txt');
 
@@ -77,19 +115,17 @@ try {
   const inputContent = fs.readFileSync(inputPath, 'utf8');
   const lines = inputContent.trim().split('\n').filter(line => line.trim().length > 0);
 
-  console.log('Input grid:');
-  lines.forEach((line, i) => console.log(`${i}: ${line}`));
-  console.log('\n' + '='.repeat(50) + '\n');
-
+  // Part 1: Count symbols with less than 4 neighbors (one-time)
   const result = findAtSymbolsWithFewNeighbors(lines);
+  console.log(`Part 1: ${result} @ symbols have less than 4 adjacent @ symbols`);
 
-  console.log('\n' + '='.repeat(50));
-  console.log(`RESULT: ${result} @ symbols have less than 4 adjacent @ symbols`);
-  console.log('='.repeat(50));
+  // Part 2: Iteratively remove symbols and count total
+  const totalRemoved = iterativelyRemoveAtSymbols(lines);
+  console.log(`Part 2: ${totalRemoved} total @ symbols removed through all iterations`);
 
 } catch (err) {
   console.error('Error reading input file:', err.message);
 }
 
-module.exports = { countAdjacentAtSymbols, findAtSymbolsWithFewNeighbors };
+module.exports = { countAdjacentAtSymbols, findAtSymbolsWithFewNeighbors, iterativelyRemoveAtSymbols };
 
